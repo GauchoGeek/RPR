@@ -1,40 +1,127 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Gerenciamento de Estoque</title>
+    <title>Gerenciamento de Estoque de Instrumentos</title>
     <style>
-        body { font-family: Arial, sans-serif; margin: 0; padding: 0; }
-        #estoque { margin: 20px; }
-        .item { margin-bottom: 10px; }
+        /* Estilos CSS para tornar o site mais bonito e detalhado */
+        body {
+            font-family: Arial, sans-serif;
+        }
+        
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+        
+        th {
+            background-color: #f2f2f2;
+        }
     </style>
 </head>
 <body>
-    <h1>Gerenciamento de Estoque</h1>
-    <div id="estoque"></div>
-
+    <h1>Gerenciamento de Estoque de Instrumentos</h1>
+    
+    <table>
+        <tr>
+            <th>Nome do Instrumento</th>
+            <th>Quantidade em Estoque</th>
+            <th>Ações</th>
+        </tr>
+        <!-- Adicione as linhas de dados aqui -->
+    </table>
+    
+    <form>
+        <label for="nome">Nome do Instrumento:</label>
+        <input type="text" id="nome" name="nome" required><br><br>
+        
+        <label for="quantidade">Quantidade em Estoque:</label>
+        <input type="number" id="quantidade" name="quantidade" required><br><br>
+        
+        <input type="submit" value="Adicionar">
+    </form>
+    
     <script>
-        // Inicializa o estoque se não existir no LocalStorage
-        if (!localStorage.getItem('estoque')) {
-            localStorage.setItem('estoque', JSON.stringify([]));
+        // Função para adicionar uma nova linha de dados ao tabela
+        function adicionarInstrumento() {
+            var nome = document.getElementById("nome").value;
+            var quantidade = document.getElementById("quantidade").value;
+            
+            var tabela = document.querySelector("table");
+            var novaLinha = tabela.insertRow(-1);
+            
+            var celulaNome = novaLinha.insertCell(0);
+            var celulaQuantidade = novaLinha.insertCell(1);
+            var celulaAcoes = novaLinha.insertCell(2);
+            
+            celulaNome.textContent = nome;
+            celulaQuantidade.textContent = quantidade;
+            celulaAcoes.innerHTML = '<button onclick="editarInstrumento(this)">Editar</button> <button onclick="removerInstrumento(this)">Remover</button>';
+            
+            // Salvar os dados em um arquivo no GitHub
+            var dados = { nome: nome, quantidade: quantidade };
+            fetch('https://api.github.com/repos/your-username/your-repo-name/contents/instrumentos.json', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'token your-personal-access-token'
+                },
+                body: JSON.stringify(dados)
+            })
+            .then(response => response.json())
+            .then(data => console.log(data))
+            .catch(error => console.error(error));
         }
-
-        // Carrega o estoque do LocalStorage
-        var estoque = JSON.parse(localStorage.getItem('estoque'));
-
-        // Função para renderizar o estoque
-        function renderizarEstoque() {
-            var divEstoque = document.getElementById('estoque');
-            divEstoque.innerHTML = '';
-            estoque.forEach(function(item, index) {
-                var divItem = document.createElement('div');
-                divItem.className = 'item';
-                divItem.textContent = item.nome + ': ' + item.quantidade;
-                divEstoque.appendChild(divItem);
-            });
+        
+        // Função para editar uma linha de dados existente
+        function editarInstrumento(botao) {
+            var linha = botao.parentNode.parentNode;
+            var nome = linha.cells[0].textContent;
+            var quantidade = linha.cells[1].textContent;
+            
+            var nomeInput = document.createElement("input");
+            nomeInput.type = "text";
+            nomeInput.value = nome;
+            
+            var quantidadeInput = document.createElement("input");
+            quantidadeInput.type = "number";
+            quantidadeInput.value = quantidade;
+            
+            linha.cells[0].innerHTML = "";
+            linha.cells[0].appendChild(nomeInput);
+            linha.cells[1].innerHTML = "";
+            linha.cells[1].appendChild(quantidadeInput);
+            
+            // Salvar as alterações em um arquivo no GitHub
+            var dados = { nome: nomeInput.value, quantidade: quantidadeInput.value };
+            fetch('https://api.github.com/repos/your-username/your-repo-name/contents/instrumentos.json', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'token your-personal-access-token'
+                },
+                body: JSON.stringify(dados)
+            })
+            .then(response => response.json())
+            .then(data => console.log(data))
+            .catch(error => console.error(error));
         }
-
-        // Renderiza o estoque inicial
-        renderizarEstoque();
+        
+        // Função para remover uma linha de dados existente
+        function removerInstrumento(botao) {
+            var linha = botao.parentNode.parentNode;
+            linha.parentNode.removeChild(linha);
+            
+            // Remover do arquivo no GitHub
+            fetch('https://api.github.com/repos/your-username/your-repo-name/contents/instrumentos.json', {
+                method: 'DELETE'
+            })
+            .then(response => response.json())
+            .then(data => console.log(data))
+            .catch(error => console.error(error));
+        }
     </script>
-</body>
-</html>
