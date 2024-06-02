@@ -1,113 +1,30 @@
+<!-- HTML -->
+<table id="items"></table> 
 
-<!DOCTYPE html>
-<html lang=“pt-br”>
-<head>
-    <meta charset=“UTF8”>
-    <title>Gerenciamento de Estoque de Instrumentos</widtle>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 40px;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        th, td {
-            border: 1px solid #ccc;
-            padding: 10px;
-            text-align: left;
-        }
-        th {
-            background-color: #eee;
-        }
-        form {
-            margin-top: 20px;
-        }
-        label, input, button {
-            margin-bottom: 10px;
-        }
-        input[type=“text”], input[type=“number”] {
-            margin-left: 10px;
-        }
-        input[type=“submit”], button {
-            padding: 5px 10px;
-            cursor: pointer;
-        }
-    </style>
-</head>
-<body>
-    <h1>Gerenciamento de Estoque de Instrumentos</h1>
-    <table id=“inventoryTable”>
-        <tr>
-            <th>Nome do Instrumento</th>
-            <th>Quantidade em Estoque</th>
-            <th>Ações</th>
-        </tr>
-    </table>
-    
-    <form id=“invForm”>
-        <label for=“nome”>Nome do Instrumento:</label>
-        <input type=“text” id=“nome” name=“nome” required>
-        <br><br>
-        <label for=“quantidade”>Quantidade em Estoque:</label>
-        <input type=“number” id=“quantidade” name=“quantidade” required>
-        <br><br>
-        <input type=“submit” value=“Adicionar”>
-    </form>
-    
-    <script>
-        document.getElementById(‘invForm’).addEventListener(‘submit’, function(e) {
-            e.preventDefault();
-            adicionarInstrumento();
-        });
+<form id="add-form">
+  <input name="name">
+  <input name="quantity">
+  <button>Adicionar</button>  
+</form>
 
-        function adicionarInstrumento() {
-            var nome = document.getElementById(“nome”).value;
-            var quantidade = document.getElementById(“quantidade”).value;
-            var tabela = document.getElementById(“inventoryTable”);
+<!-- CSS --> 
+table {
+  border-collapse: collapse;
+}
 
-            var novaLinha = tabela.insertRow(-1);
-            var celulaNome = novaLinha.insertCell(0);
-            var celulaQuantidade = novaLinha.insertCell(1);
-            var celulaAcoes = novaLinha.insertCell(2);
+td, th {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
 
-            celulaNome.textContent = nome;
-            celulaQuantidade.textContent = quantidade;
-            celulaAcoes.innerHTML = &lt;button onclick="editarInstrumento(this)"&gt;Editar&lt;/button&gt; &lt;button onclick="removerInstrumento(this)"&gt;Remover&lt;/button&gt;;
+/* JavaScript */
+const form = document.getElementById('add-form');
+const itemsTable = document.getElementById('items');
 
-            document.getElementById(“nome”).value = ‘’;
-            document.getElementById(“quantidade”).value = ‘’;
-        }
-
-        function editarInstrumento(botao) {
-            var linha = botao.parentNode.parentNode;
-            var celulaNome = linha.cells[0];
-            var celulaQuantidade = linha.cells[1];
-            var nome = celulaNome.textContent;
-            var quantidade = celulaQuantidade.textContent;
-
-            celulaNome.innerHTML = &lt;input type='text' value='${nome}'&gt;;
-            celulaQuantidade.innerHTML = &lt;input type='number' value='${quantidade}'&gt;;
-            botao.textContent = “Salvar”;
-            botao.setAttribute(“onclick”, “salvarEdicao(this)”);
-        }
-
-        function salvarEdicao(botao) {
-            var linha = botao.parentNode.parentNode;
-            var inputNome = linha.cells[0].querySelector(‘input’).value;
-            var inputQuantidade = linha.cells[1].querySelector(‘input’).value;
-
-            linha.cells[0].textContent = inputNome;
-            linha.cells[1].textContent = inputQuantidade;
-            botao.textContent = “Editar”;
-            botao.setAttribute(“onclick”, “editarInstrumento(this)”);
-        }
-
-        function removerInstrumento(botao) {
-            var linha = botao.parentNode.parentNode;
-            linha.parentNode.removeChild(linha);
-        }
-    </script>
-</body>
-</html>
+form.addEventListener('submit', e => {
+  e.preventDefault();
+  
+  // obtém dados do form
+  // envia requisição POST para API
+  // adiciona linha na tabela
+});
