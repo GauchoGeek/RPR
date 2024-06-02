@@ -64,7 +64,7 @@
             
             // Salvar os dados em um arquivo no GitHub
             var dados = { nome: nome, quantidade: quantidade };
-            fetch('https://api.github.com/repos/your-username/your-repo-name/contents/instrumentos.json', {
+            fetch('https://api.github.com/repos/GauchoGeek/RPR/contents/instrumentos.json', {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -98,7 +98,7 @@
             
             // Salvar as alterações em um arquivo no GitHub
             var dados = { nome: nomeInput.value, quantidade: quantidadeInput.value };
-            fetch('https://api.github.com/repos/your-username/your-repo-name/contents/instrumentos.json', {
+            fetch('https://api.github.com/repos/GauchoGeek/RPR/contents/instrumentos.json', {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -117,7 +117,7 @@
             linha.parentNode.removeChild(linha);
             
             // Remover do arquivo no GitHub
-            fetch('https://api.github.com/repos/your-username/your-repo-name/contents/instrumentos.json', {
+            fetch('https://api.github.com/repos/GauchoGeek/RPR/contents/instrumentos.json', {
                 method: 'DELETE'
             })
             .then(response => response.json())
