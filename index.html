@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Gerenciamento de Estoque</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 0; padding: 0; }
+        #estoque { margin: 20px; }
+        .item { margin-bottom: 10px; }
+    </style>
+</head>
+<body>
+    <h1>Gerenciamento de Estoque</h1>
+    <div id="estoque"></div>
+
+    <script>
+        // Inicializa o estoque se não existir no LocalStorage
+        if (!localStorage.getItem('estoque')) {
+            localStorage.setItem('estoque', JSON.stringify([]));
+        }
+
+        // Carrega o estoque do LocalStorage
+        var estoque = JSON.parse(localStorage.getItem('estoque'));
+
+        // Função para renderizar o estoque
+        function renderizarEstoque() {
+            var divEstoque = document.getElementById('estoque');
+            divEstoque.innerHTML = '';
+            estoque.forEach(function(item, index) {
+                var divItem = document.createElement('div');
+                divItem.className = 'item';
+                divItem.textContent = item.nome + ': ' + item.quantidade;
+                divEstoque.appendChild(divItem);
+            });
+        }
+
+        // Renderiza o estoque inicial
+        renderizarEstoque();
+    </script>
+</body>
+</html>
