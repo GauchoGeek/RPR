@@ -1,30 +1,87 @@
-<!-- HTML -->
-<table id="items"></table> 
+<!DOCTYPE html>
+<html lang=“pt-br”>
+<head>
+    <meta charset=“UTF-8”>
+    <title>Gerenciamento de Estoque de Equipamentos</title>
+    <meta name=“viewport” content=“width=device-width, initial-scale=1.0”>
 
-<form id="add-form">
-  <input name="name">
-  <input name="quantity">
-  <button>Adicionar</button>  
-</form>
+    <!-- Estilos simples para clareza e legibilidade -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f4;
+        }
+        table {
+            width: 100%;
+            margin-top: 20px;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 8px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        input, button {
+            padding: 10px;
+            margin-top: 10px;
+        }
+        button {
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>Gerenciamento de Estoque de Equipamentos</h1>
+    <form id=“inventoryForm”>
+        <input type=“text” id=“nome” placeholder=“Nome do Equipamento” required>
+        <input type=“number” id=“quantidade” placeholder=“Quantidade” required>
+        <button type=“submit”>Adicionar</button>
+    </form>
+    <table>
+        <thead>
+            <tr>
+                <th>Nome do Equipamento</th>
+                <th>Quantidade</th>
+            </tr>
+        </thead>
+        <tbody id=“inventoryTable”>
+            <!-- Itens do estoque serão adicionados aqui -->
+        </tbody>
+    </table>
 
-<!-- CSS --> 
-table {
-  border-collapse: collapse;
-}
-
-td, th {
-  border: 1px solid #ddd;
-  padding: 8px;
-}
-
-/* JavaScript */
-const form = document.getElementById('add-form');
-const itemsTable = document.getElementById('items');
-
-form.addEventListener('submit', e => {
-  e.preventDefault();
-  
-  // obtém dados do form
-  // envia requisição POST para API
-  // adiciona linha na tabela
-});
+    <!-- JavaScript para interação com o backend -->
+    <script>
+        document.getElementById(‘inventoryForm’).addEventListener(‘submit’, function(e) {
+            e.preventDefault();
+            const nome = document.getElementById(‘nome’).value;
+            const quantidade = document.getElementById(‘quantidade’).value;
+            
+            fetch(‘https://<your-nodejs-server>/inventory’, {
+                method: ‘POST’,
+                headers: {
+                    ‘Content-Type’: ‘application/json’,
+                },
+                body: JSON.stringify({ nome, quantidade })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    const table = document.getElementById(‘inventoryTable’);
+                    const row = table.insertRow();
+                    row.insertCell(0).textContent = nome;
+                    row.insertCell(1).textContent = quantidade;
+                    document.getElementById(‘nome’).value = ‘’;
+                    document.getElementById(‘quantidade’).value = ‘’;
+                } else {
+                    alert(‘Erro ao adicionar item’);
+                }
+            })
+            .catch(error => alert(‘Erro ao adicionar item’));
+        });
+    </script>
+</body>
+</html>
